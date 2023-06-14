@@ -1,9 +1,10 @@
 import React from 'react';
 
-function DoneList({ doneTasks }) {
-  const handleChange = (taskId, checked) => {
-    console.log('Berga en DoneList : '+taskId)
-    // handleCheckboxChange(taskId, checked);
+function DoneList({ doneTasks, handleCheckboxChange }) {
+
+  
+  const handleChange = (taskId) => {
+    handleCheckboxChange(taskId);
   };
 
   return (
@@ -16,7 +17,6 @@ function DoneList({ doneTasks }) {
               onChange={() => handleChange(task._id)}
             />
             {task.description}
->
         </li>
       ))}
     </ul>

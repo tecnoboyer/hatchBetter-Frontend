@@ -14,6 +14,17 @@ function App() {
       .catch(error => console.error('Error fetching tasks:', error));
   }, []);
 
+  const handleCheckboxChange = (taskId) => {
+    const updatedTasks = tasks.map(task => {
+      if (task._id === taskId) {
+        return { ...task, status: !task.status };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  };
+
+
   const todotasks = tasks.filter(task => task.status);
   const donetasks = tasks.filter(task => !task.status);
 
@@ -38,7 +49,7 @@ function App() {
           <h6>To Do</h6>
           <hr />
           {todotasks.length > 0 ? (
-            <TodoList todoTasks={todotasks} />
+            <TodoList todoTasks={todotasks} handleCheckboxChange={handleCheckboxChange}/>
           ) : (
             <p>No tasks to display</p>
           )}
@@ -48,7 +59,7 @@ function App() {
           <h6>Done</h6>
           <hr />
           {donetasks.length > 0 ? (
-             <DoneList doneTasks={donetasks} />
+             <DoneList doneTasks={donetasks}  handleCheckboxChange={handleCheckboxChange}  />
           ) : (
             <p>No tasks to display</p>
           )}
