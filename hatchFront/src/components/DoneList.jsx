@@ -2,9 +2,9 @@ import React from 'react';
 
 function DoneList({ doneTasks, handleCheckboxChange }) {
 
-  
-  const handleChange = (taskId) => {
-    handleCheckboxChange(taskId);
+  const handleChange = (taskId,taskStatus) => {
+    handleCheckboxChange(taskId,taskStatus);
+
   };
 
   return (
@@ -14,7 +14,7 @@ function DoneList({ doneTasks, handleCheckboxChange }) {
 
             <input
               type="checkbox"
-              onChange={() => handleChange(task._id)}
+              onChange={() => handleChange(task._id,task.status)}
             />
             {task.description}
         </li>
