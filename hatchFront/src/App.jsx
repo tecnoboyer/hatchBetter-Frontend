@@ -3,15 +3,10 @@ import TodoList from './components/TodoList';
 import DoneList from './components/DoneList';
 import './App.css';
 import useUpdateTask  from './hooks/useUpdatetask';
-// import DoneList from './DoneList';
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const { isLoading, error, updateTask } = useUpdateTask();
-
-
-
-
 
   useEffect(() => {
     fetch('http://localhost:8000/api/adminTask')
@@ -21,8 +16,7 @@ function App() {
   }, []);
 
   const handleCheckboxChange = (taskId,taskStatus) => {
-    console.log('taskId : '+taskId);
-    console.log('taskStatus : '+taskStatus);
+
     // const updatedTasks = tasks.map(task => {
     //   if (task._id === taskId) {
     //     return { ...task, status: !task.status };
@@ -32,8 +26,6 @@ function App() {
     // // setTasks(updatedTasks); // Lets get it out to continue
     updateTask(taskId,taskStatus);
   };
-
-
 
 
   const todotasks = tasks.filter(task => !task.status);
