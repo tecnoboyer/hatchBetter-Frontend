@@ -11,6 +11,8 @@ import socketIOClient from 'socket.io-client';
 function App() {
   const [tasks, setTasks] = useState([]);
 
+  const [searchQuery, setSearchQuery] = useState('');
+
 
   const { isLoading, error, updateTask } = useUpdateTask();
   const { isLoading2: isAddingTask, error: addTaskError, addTask } = useAddTask();
@@ -67,6 +69,34 @@ function App() {
   const todotasks = tasks.filter((task) => !task.status);
   const donetasks = tasks.filter((task) => task.status);
 
+
+  const filteredTodoTasks = tasks.filter((task) =>
+  task.description.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
+const filteredDoneTasks = tasks.filter((task) =>
+  task.description.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
+useEffect(() => {
+  const timeoutId = setTimeout(() => {
+    const filteredTodoTasks = filteredTodoTasks.filter((task) =>
+      task.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredDoneTasks = filteredDoneTasks.filter((task) =>
+      task.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    console.log('filteredTodoTasks:');
+    console.dir(filteredTodoTasks);
+  }, 300);
+
+  return () => {
+    clearTimeout(timeoutId);
+  };
+}, [searchQuery]);
+
   return (
     <>
       <div className="wrapper">
@@ -84,14 +114,14 @@ function App() {
         </div>
 
         <div className="two">
-          <input placeholder='Search..'  ></input>
+          <input placeholder="Search.." onChange={(e) => setSearchQuery(e.target.value)} />
         </div>
 
         <div className="three">
           <h6>To Do</h6>
           <hr />
           {todotasks.length > 0 ? (
-            <TodoList  todotasks={todotasks} handleCheckboxChange={handleCheckboxChange} />
+            <TodoList  todotasks={filteredTodoTasks} handleCheckboxChange={handleCheckboxChange} />
           ) : (
             <p>No tasks to display</p>
           )}
@@ -100,7 +130,7 @@ function App() {
           <h6>Done</h6>
           <hr />
           {donetasks.length > 0 ? (
-            <DoneList  donetasks={donetasks} handleCheckboxChange={handleCheckboxChange} />
+            <DoneList  donetasks={filteredDoneTasks} handleCheckboxChange={handleCheckboxChange} />
           ) : (
             <p>No tasks to display</p>
           )}
