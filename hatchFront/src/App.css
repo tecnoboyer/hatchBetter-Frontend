@@ -1,10 +1,8 @@
-
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #010c14;
     background-color: #f3f1f1e2;
-    margin:10px;
+    margin: 5px;  
   }
   a:hover {
     color: #747bff;
@@ -13,58 +11,79 @@
   button {
     background-color: #0a2fc1;
     gap: 2px;
-    margin:3px;
-
-}
-.wrapper {
-  display: grid;
-  grid-template-columns: 1fr,1fr, 1fr,1fr;
-  gap: 1px;
-  margin:1px;
-  grid-auto-rows: minmax(auto);
-  border: 1px solid rgb(231, 239, 164);
-  background-color: #75ebcc;
+    margin: 3px;
+    border-radius: 4px;
+  }
+  .wrapper {
+    display: grid;
+    margin: 3px;
+    grid-auto-rows: minmax(auto);
+    border: 1px solid rgb(231, 239, 164);
+    background-color: #75ebcc;
+  }
+  .button {
+    background-color: #7993f9;
+    margin: 1px;
+    height: 20px;
+  }
+  
+  .head1 {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: left;
+    height: 10px;
+    margin: 15px;
+  }
+  
+  .head2 {
+    grid-column: 5;
+    grid-row: 2;
+    margin: 10px;
+    height: 10px;
+    text-align: right;
+  }
+  
+  .one {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 15px;
+    height: 10px;
+    
+  }
+  
+  .two {
+    padding: 0 10px;
+    height: 30px;
+    grid-column: 4;
+    grid-row: 2;
+    margin: 15px;
+    text-align: center;
+    border-radius: 8px;
+  }
+  
+  .three {
+    padding: 0 10px;
+    height: 30px;
+    grid-column: 1;
+    grid-row: 3;
+    gap: 20px;
+    text-align: left;
+    margin: 15px; 
+  }
+  
+  .four {
+    grid-column: 3;
+    grid-row: 3;
+    height: 600px;
+    gap: 20px;
+    text-align: left;
+    margin: 15px; 
+  }
   
 }
 
-}
-.button {
-  background-color: #7993f9;
-  margin:1px;
 
-}
-.head1 {
-  grid-column: 1 ;
-  grid-row: 1;
-  text-align: left;
- 
-}
-.head2 {
-  grid-column: 4 ;
-  grid-row: 1;
-  text-align: right;
 
- 
-}
-.one {
-  grid-column: 1 ;
-  grid-row: 2;
-  
-}
-.two {
-  grid-column: 4 ;
-  grid-row: 2;
-}
-.three {
-  grid-column: 1 ;
-  grid-row: 3;
-  gap:20px;
-  padding:3px;
-  text-align: left;
-}
-.four {
-  grid-column: 3 ;
-  grid-row: 3;
-  gap:20px;
-  text-align: left;
-}
+
+
+

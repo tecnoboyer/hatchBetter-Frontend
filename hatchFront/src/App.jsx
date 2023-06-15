@@ -10,10 +10,7 @@ import socketIOClient from 'socket.io-client';
 
 function App() {
   const [tasks, setTasks] = useState([]);
-
   const [searchQuery, setSearchQuery] = useState('');
-
-
   const { isLoading, error, updateTask } = useUpdateTask();
   const { isLoading2: isAddingTask, error: addTaskError, addTask } = useAddTask();
   const { isloading3, deleteTask } = useDeleteTask();
@@ -22,11 +19,9 @@ function App() {
   const addInputRef = useRef(null);
 
 
-
+  /// By adding syncing we can get the update fron the backend when some changes occurs there.
   useEffect(() => {
     const socket = socketIOClient('http://localhost:8000');
-
-    // Listen for 'message' event from the server
     socket.on('message', (data) => {
       console.log('Received message from server:', data);
       setReceivedMessage(data);
@@ -69,18 +64,17 @@ function App() {
   const todotasks = tasks.filter((task) => !task.status);
   const donetasks = tasks.filter((task) => task.status);
 
-
+  ///filtering to show result down the searchQuery
   const filteredTodoTasks = tasks.filter((task) =>
-  task.description.toLowerCase().includes(searchQuery.toLowerCase())
-);
+  task.description.toLowerCase().includes(searchQuery.toLowerCase()));
 
-const filteredDoneTasks = tasks.filter((task) =>
-  task.description.toLowerCase().includes(searchQuery.toLowerCase())
-);
+  const filteredDoneTasks = tasks.filter((task) =>
+  task.description.toLowerCase().includes(searchQuery.toLowerCase()));
 
-useEffect(() => {
-  const timeoutId = setTimeout(() => {
-    const filteredTodoTasks = filteredTodoTasks.filter((task) =>
+  // decoupling machine times from human beings
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      const filteredTodoTasks = filteredTodoTasks.filter((task) =>
       task.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -102,7 +96,7 @@ useEffect(() => {
       <div className="wrapper">
         <div>
           <h2 className="head1">Marveleous v2.0</h2>
-          <h5 className="head2" onClick={handleDeleteTask}>Delete all tasks</h5>
+          <h5 className="head2"   onClick={handleDeleteTask}>Delete all tasks</h5>
 
         </div>
 
