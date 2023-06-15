@@ -3,12 +3,18 @@ import TodoList from './components/TodoList';
 import DoneList from './components/DoneList';
 import './App.css';
 import useUpdateTask  from './hooks/useUpdatetask';
-// import DoneList from './DoneList';
+import useSocket from './hooks/useSocket';
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const { isLoading, error, updateTask } = useUpdateTask();
+  const handleReceiveMessage = (data) => {
+    console.log('data in hadleReceiveMessage :'+data);
+    setReceivedMessage(data);
+  };
+  const { sendMessage } = useSocket('http://localhost:8000',handleReceiveMessage); 
 
+  const [receivedMessage, setReceivedMessage] = useState('');
 
 
 
@@ -21,8 +27,7 @@ function App() {
   }, []);
 
   const handleCheckboxChange = (taskId,taskStatus) => {
-    console.log('taskId : '+taskId);
-    console.log('taskStatus : '+taskStatus);
+
     // const updatedTasks = tasks.map(task => {
     //   if (task._id === taskId) {
     //     return { ...task, status: !task.status };
@@ -32,8 +37,6 @@ function App() {
     // // setTasks(updatedTasks); // Lets get it out to continue
     updateTask(taskId,taskStatus);
   };
-
-
 
 
   const todotasks = tasks.filter(task => !task.status);
