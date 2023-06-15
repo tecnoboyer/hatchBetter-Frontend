@@ -1,22 +1,18 @@
 import React from 'react';
 
-function DoneList({ doneTasks, handleCheckboxChange }) {
-
-  const handleChange = (taskId,taskStatus) => {
-    handleCheckboxChange(taskId,taskStatus);
-
+function DoneList({ donetasks, handleCheckboxChange }) {
+  const handleChange = (taskId, taskStatus) => {
+    handleCheckboxChange(taskId, taskStatus);
   };
 
-  return (
-    <ul style={{ listStyleType: 'none', padding: 0 }}   >
-      {doneTasks.map(task => (
-        <li key={task._id}>
+  const donetasksloc = donetasks.filter((task) => task.status);
 
-            <input
-              type="checkbox"
-              onChange={() => handleChange(task._id,task.status)}
-            />
-            {task.description}
+  return (
+    <ul style={{ listStyleType: 'none', padding: 0 }}>
+      {donetasksloc.map((task) => (
+        <li key={task._id}>
+          <input type="checkbox" onChange={() => handleChange(task._id, task.status)} />
+          {task.description}
         </li>
       ))}
     </ul>
@@ -24,5 +20,3 @@ function DoneList({ doneTasks, handleCheckboxChange }) {
 }
 
 export default DoneList;
-
-

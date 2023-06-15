@@ -4,15 +4,22 @@ import DoneList from './components/DoneList';
 import './App.css';
 import useUpdateTask from './hooks/useUpdatetask';
 import useAddTask from './hooks/useAddTask';
-import socketIOClient from 'socket.io-client'; // Import socket.io-client
+import useDeleteTask from './hooks/useDeleteTask';
+
+import socketIOClient from 'socket.io-client'; 
 
 function App() {
   const [tasks, setTasks] = useState([]);
+
+
   const { isLoading, error, updateTask } = useUpdateTask();
   const { isLoading2: isAddingTask, error: addTaskError, addTask } = useAddTask();
+  const { isloading3, deleteTask } = useDeleteTask();
 
   const [receivedMessage, setReceivedMessage] = useState('');
   const addInputRef = useRef(null);
+
+
 
   useEffect(() => {
     const socket = socketIOClient('http://localhost:8000');
@@ -33,7 +40,8 @@ function App() {
       .then((response) => response.json())
       .then((data) => setTasks(data.tasks))
       .catch((error) => console.error('Error fetching tasks:', error));
-  }, []);
+  }, [tasks]);
+
 
   const handleCheckboxChange = (taskId, taskStatus) => {
     updateTask(taskId, taskStatus);
@@ -41,11 +49,20 @@ function App() {
 
   const handleAddTask = () => {
     const description = addInputRef.current.value;
-    const status = false; // Assuming the default status is false
+    const status = false; 
 
     addTask(description, status);
-    addInputRef.current.value = ''; // Clear the input field after adding the task
+    addInputRef.current.value = ''; 
   };
+
+
+  const handleDeleteTask = () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete all tasks?");
+      if (confirmDelete) {
+        deleteTask();
+      }
+  }
+      
 
   const todotasks = tasks.filter((task) => !task.status);
   const donetasks = tasks.filter((task) => task.status);
@@ -55,7 +72,8 @@ function App() {
       <div className="wrapper">
         <div>
           <h2 className="head1">Marveleous v2.0</h2>
-          <h5 className="head2">Delete all tasks</h5>
+          <h5 className="head2" onClick={handleDeleteTask}>Delete all tasks</h5>
+
         </div>
 
         <div className="one">
@@ -66,13 +84,14 @@ function App() {
         </div>
 
         <div className="two">
-          <input></input>
+          <input placeholder='Search..'  ></input>
         </div>
+
         <div className="three">
-          <h6>To Do </h6>
+          <h6>To Do</h6>
           <hr />
           {todotasks.length > 0 ? (
-            <TodoList todoTasks={todotasks} handleCheckboxChange={handleCheckboxChange} />
+            <TodoList  todotasks={todotasks} handleCheckboxChange={handleCheckboxChange} />
           ) : (
             <p>No tasks to display</p>
           )}
@@ -81,7 +100,7 @@ function App() {
           <h6>Done</h6>
           <hr />
           {donetasks.length > 0 ? (
-            <DoneList doneTasks={donetasks} handleCheckboxChange={handleCheckboxChange} />
+            <DoneList  donetasks={donetasks} handleCheckboxChange={handleCheckboxChange} />
           ) : (
             <p>No tasks to display</p>
           )}
@@ -92,3 +111,8 @@ function App() {
 }
 
 export default App;
+
+
+
+
+ 
