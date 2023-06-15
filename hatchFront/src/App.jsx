@@ -4,7 +4,9 @@ import DoneList from './components/DoneList';
 import './App.css';
 import useUpdateTask from './hooks/useUpdatetask';
 import useAddTask from './hooks/useAddTask';
-import socketIOClient from 'socket.io-client'; // Import socket.io-client
+import useDeleteTask from './hooks/useDeleteTask';
+
+import socketIOClient from 'socket.io-client'; 
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -13,6 +15,9 @@ function App() {
 
   const [receivedMessage, setReceivedMessage] = useState('');
   const addInputRef = useRef(null);
+
+  const [deleteAllClicked, setDeleteAllClicked] = useState(false);
+
 
   useEffect(() => {
     const socket = socketIOClient('http://localhost:8000');
@@ -41,11 +46,25 @@ function App() {
 
   const handleAddTask = () => {
     const description = addInputRef.current.value;
-    const status = false; // Assuming the default status is false
+    const status = false; 
 
     addTask(description, status);
-    addInputRef.current.value = ''; // Clear the input field after adding the task
+    addInputRef.current.value = ''; 
   };
+
+
+  useEffect(() => {
+    if (deleteAllClicked) {
+      const confirmDelete = window.confirm("Are you sure you want to delete all tasks?");
+      if (confirmDelete) {
+        useDeleteTask();
+      }
+      setDeleteAllClicked(false); 
+    }
+  }, [deleteAllClicked]);
+  
+
+  
 
   const todotasks = tasks.filter((task) => !task.status);
   const donetasks = tasks.filter((task) => task.status);
@@ -55,7 +74,8 @@ function App() {
       <div className="wrapper">
         <div>
           <h2 className="head1">Marveleous v2.0</h2>
-          <h5 className="head2">Delete all tasks</h5>
+          <h5 className="head2" onClick={() => setDeleteAllClicked(true)}>Delete all tasks</h5>
+
         </div>
 
         <div className="one">

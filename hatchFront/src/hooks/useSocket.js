@@ -7,9 +7,8 @@ const useSocket = (serverUrl, handleReceiveMessage) => {
 
 
   useEffect(() => {
-    socketRef.current = io(serverUrl); // Establish the Socket.io connection
+    socketRef.current = io(serverUrl); 
 
-    // Cleanup on unmount
     return () => {
       socketRef.current.disconnect();
     };
