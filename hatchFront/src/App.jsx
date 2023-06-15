@@ -3,10 +3,21 @@ import TodoList from './components/TodoList';
 import DoneList from './components/DoneList';
 import './App.css';
 import useUpdateTask  from './hooks/useUpdatetask';
+import useSocket from './hooks/useSocket';
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const { isLoading, error, updateTask } = useUpdateTask();
+  const handleReceiveMessage = (data) => {
+    console.log('data in hadleReceiveMessage :'+data);
+    setReceivedMessage(data);
+  };
+  const { sendMessage } = useSocket('http://localhost:8000',handleReceiveMessage); 
+
+  const [receivedMessage, setReceivedMessage] = useState('');
+
+
+
 
   useEffect(() => {
     fetch('http://localhost:8000/api/adminTask')
