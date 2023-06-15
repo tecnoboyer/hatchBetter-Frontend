@@ -4,7 +4,6 @@ function DoneList({ donetasks, handleCheckboxChange }) {
   const handleChange = (taskId, taskStatus) => {
     handleCheckboxChange(taskId, taskStatus);
   };
-
   const donetasksloc = donetasks.filter((task) => task.status);
 
   return (
