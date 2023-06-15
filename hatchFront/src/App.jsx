@@ -4,19 +4,32 @@ import DoneList from './components/DoneList';
 import './App.css';
 import useUpdateTask  from './hooks/useUpdatetask';
 import useSocket from './hooks/useSocket';
+import socketIOClient from 'socket.io-client'; // Import socket.io-client
+
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const { isLoading, error, updateTask } = useUpdateTask();
-  const handleReceiveMessage = (data) => {
-    console.log('data in hadleReceiveMessage :'+data);
-    setReceivedMessage(data);
-  };
-  const { sendMessage } = useSocket('http://localhost:8000',handleReceiveMessage); 
 
   const [receivedMessage, setReceivedMessage] = useState('');
 
+  useEffect(() => {
+    const socket = socketIOClient('http://localhost:8000');
+  
+    // Listen for 'message' event from the server
+    socket.on('message', (data) => {
+      console.log('Received message from server:', data);
 
+      setReceivedMessage(data);
+  
+
+    });
+  
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+  
 
 
   useEffect(() => {
@@ -59,7 +72,7 @@ function App() {
           <input></input>
         </div>
         <div className="three">
-          <h6>To Do</h6>
+          <h6>To Do </h6>
           <hr />
           {todotasks.length > 0 ? (
             <TodoList todoTasks={todotasks} handleCheckboxChange={handleCheckboxChange}/>

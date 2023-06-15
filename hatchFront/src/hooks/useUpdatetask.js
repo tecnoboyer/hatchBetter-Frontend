@@ -5,8 +5,7 @@ function useUpdatetask() {
   const [error, setError] = useState(null);
   const [updatedTask, setUpdatedTask] = useState(null);
 
-  console.log('mark');
-  console.dir(updatedTask);
+
 
   useEffect(() => {
     if (updatedTask) {

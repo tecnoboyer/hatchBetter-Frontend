@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 
-const useSocket = (serverUrl) => {
+const useSocket = (serverUrl, handleReceiveMessage) => {
   const socketRef = useRef(null);
 
   useEffect(() => {
@@ -13,21 +13,25 @@ const useSocket = (serverUrl) => {
     };
   }, [serverUrl]);
 
-  const sendMessage = (message) => {
-    socketRef.current.emit('message', message);
+  const sendMessage = () => {
+    socketRef.current.emit('message');
   };
 
   useEffect(() => {
     if (!socketRef.current) return;
 
-    socketRef.current.on('response', (data) => {
+    const socket = socketRef.current;
+
+    socket.on('response', (data) => {
       // Handle the received response
-      console.log('Received response:', data);
+      handleReceiveMessage(data);
     });
 
-    // Add more event listeners here for other events
-
-  }, []);
+    // Cleanup on unmount
+    return () => {
+      socket.off('response');
+    };
+  }, [socketRef.current, handleReceiveMessage]);
 
   return { sendMessage };
 };
