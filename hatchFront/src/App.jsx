@@ -1,59 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TodoList from './components/TodoList';
 import DoneList from './components/DoneList';
 import './App.css';
-import useUpdateTask  from './hooks/useUpdatetask';
-import useSocket from './hooks/useSocket';
+import useUpdateTask from './hooks/useUpdatetask';
+import useAddTask from './hooks/useAddTask';
 import socketIOClient from 'socket.io-client'; // Import socket.io-client
-
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const { isLoading, error, updateTask } = useUpdateTask();
+  const { isLoading2: isAddingTask, error: addTaskError, addTask } = useAddTask();
 
   const [receivedMessage, setReceivedMessage] = useState('');
+  const addInputRef = useRef(null);
 
   useEffect(() => {
     const socket = socketIOClient('http://localhost:8000');
-  
+
     // Listen for 'message' event from the server
     socket.on('message', (data) => {
       console.log('Received message from server:', data);
-
       setReceivedMessage(data);
-  
-
     });
-  
+
     return () => {
       socket.disconnect();
     };
   }, []);
-  
-
 
   useEffect(() => {
     fetch('http://localhost:8000/api/adminTask')
-      .then(response => response.json())
-      .then(data => setTasks(data.tasks))
-      .catch(error => console.error('Error fetching tasks:', error));
+      .then((response) => response.json())
+      .then((data) => setTasks(data.tasks))
+      .catch((error) => console.error('Error fetching tasks:', error));
   }, []);
 
-  const handleCheckboxChange = (taskId,taskStatus) => {
-
-    // const updatedTasks = tasks.map(task => {
-    //   if (task._id === taskId) {
-    //     return { ...task, status: !task.status };
-    //   }
-    //   return task;
-    // });
-    // // setTasks(updatedTasks); // Lets get it out to continue
-    updateTask(taskId,taskStatus);
+  const handleCheckboxChange = (taskId, taskStatus) => {
+    updateTask(taskId, taskStatus);
   };
 
+  const handleAddTask = () => {
+    const description = addInputRef.current.value;
+    const status = false; // Assuming the default status is false
 
-  const todotasks = tasks.filter(task => !task.status);
-  const donetasks = tasks.filter(task => task.status);
+    addTask(description, status);
+    addInputRef.current.value = ''; // Clear the input field after adding the task
+  };
+
+  const todotasks = tasks.filter((task) => !task.status);
+  const donetasks = tasks.filter((task) => task.status);
 
   return (
     <>
@@ -64,8 +59,10 @@ function App() {
         </div>
 
         <div className="one">
-          <input></input>
-          <button className="button">Add</button>
+          <input name="add" ref={addInputRef} />
+          <button className="button" onClick={handleAddTask}>
+            Add
+          </button>
         </div>
 
         <div className="two">
@@ -75,14 +72,16 @@ function App() {
           <h6>To Do </h6>
           <hr />
           {todotasks.length > 0 ? (
-            <TodoList todoTasks={todotasks} handleCheckboxChange={handleCheckboxChange}/>
-          ) : ( <p>No tasks to display</p> )}
+            <TodoList todoTasks={todotasks} handleCheckboxChange={handleCheckboxChange} />
+          ) : (
+            <p>No tasks to display</p>
+          )}
         </div>
         <div className="four">
           <h6>Done</h6>
           <hr />
           {donetasks.length > 0 ? (
-             <DoneList doneTasks={donetasks}  handleCheckboxChange={handleCheckboxChange}  />
+            <DoneList doneTasks={donetasks} handleCheckboxChange={handleCheckboxChange} />
           ) : (
             <p>No tasks to display</p>
           )}

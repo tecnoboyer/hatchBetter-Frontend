@@ -4,6 +4,8 @@ import io from 'socket.io-client';
 const useSocket = (serverUrl, handleReceiveMessage) => {
   const socketRef = useRef(null);
 
+
+
   useEffect(() => {
     socketRef.current = io(serverUrl); // Establish the Socket.io connection
 
