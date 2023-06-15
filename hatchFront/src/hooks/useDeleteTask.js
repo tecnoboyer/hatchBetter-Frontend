@@ -7,10 +7,9 @@ function useDeleteTask() {
   const [error, setError] = useState(null);
 
   const deleteTask = () => {
-    setIsoading3(true);
+    setIsloading3(true);
     setError(null);
-
-
+  
     fetch('http://localhost:8000/api/adminTask', {
       method: 'DELETE',
       headers: {
@@ -28,10 +27,10 @@ function useDeleteTask() {
         setError('Error adding task');
       });
   };
+  
 
   return {
     isloading3,
-    error,
     deleteTask,
   };
 }
